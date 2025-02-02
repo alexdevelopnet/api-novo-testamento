@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "IQoQn9IDq+GHYrGY+n5qHRXSzdEDm8J5o9oNEL1xRY0=",
+  "Source": "api-novo-testamento",
+  "BasePath": "_content/api-novo-testamento",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
