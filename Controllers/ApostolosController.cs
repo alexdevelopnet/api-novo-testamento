@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ApiNovoTestamento.Models;
- 
+using api_novo_testamento.Interfaces;
+using System.Threading.Tasks;
+using api_novo_testamento.Dtos;
+
 
 namespace ApiNovoTestamento.Controllers
 {
@@ -8,32 +11,24 @@ namespace ApiNovoTestamento.Controllers
     [Route("api/[controller]")]
     public class ApostolosController : ControllerBase
     {
-        private static List<Apostolo> apostolos = new List<Apostolo>
+        private readonly IApostoloService _service;
+
+        public ApostolosController(IApostoloService service)
         {
-            new Apostolo { Id = 1, Nome = "Pedro" },
-            new Apostolo { Id = 2, Nome = "Tiago, filho de Zebedeu" },
-            new Apostolo { Id = 3, Nome = "João" },
-            new Apostolo { Id = 4, Nome = "André" },
-            new Apostolo { Id = 5, Nome = "Filipe" },
-            new Apostolo { Id = 6, Nome = "Bartolomeu" },
-            new Apostolo { Id = 7, Nome = "Mateus" },
-            new Apostolo { Id = 8, Nome = "Tomé" },
-            new Apostolo { Id = 9, Nome = "Tiago, filho de Alfeu" },
-            new Apostolo { Id = 10, Nome = "Tadeu (ou Judas, filho de Tiago)" },
-            new Apostolo { Id = 11, Nome = "Simão, o Zelote" },
-            new Apostolo { Id = 12, Nome = "Judas Iscariotes" }
-        };
+            _service = service;
+        }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Apostolo>>> GetApostolos()
+        public async Task<ActionResult<IEnumerable<ApostoloResponse>>> GetApostolos()
         {
+            var apostolos = await _service.GetAll();
             return Ok(apostolos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Apostolo> GetApostolo(int id)
+        public async Task<ActionResult<ApostoloResponse>> GetApostolo(int id)
         {
-            var apostolo = apostolos.FirstOrDefault(a => a.Id == id);
+            var apostolo = await _service.GetById(id);
             if (apostolo == null)
             {
                 return NotFound();
@@ -42,35 +37,25 @@ namespace ApiNovoTestamento.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Apostolo> AddApostolo(Apostolo novoApostolo)
+        public ActionResult<Apostolo> AddApostolo(ApostoloRequest request)
         {
-            apostolos.Add(novoApostolo);
-            return CreatedAtAction(nameof(GetApostolo), new { id = novoApostolo.Id }, novoApostolo);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return CreatedAtAction(nameof(GetApostolo), new { id = request.Nome }, request);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateApostolo(int id, Apostolo atualizadoApostolo)
+        public async Task<IActionResult> UpdateApostolo(int id, [FromBody] ApostoloRequest request)
         {
-            var apostolo = apostolos.FirstOrDefault(a => a.Id == id);
-            if (apostolo == null)
-            {
-                return NotFound();
-            }
-
-            apostolo.Nome = atualizadoApostolo.Nome;
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _service.Update(id, request);
             return NoContent();
+
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteApostolo(int id)
+        public async Task<IActionResult> DeleteApostolo(int id)
         {
-            var apostolo = apostolos.FirstOrDefault(a => a.Id == id);
-            if (apostolo == null)
-            {
-                return NotFound();
-            }
-
-            apostolos.Remove(apostolo);
+            await _service.Delete(id);
             return NoContent();
         }
     }

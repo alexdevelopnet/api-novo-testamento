@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("api-novo-testamento")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b56cf337bcd1d1dd35d8356e3445adecf1a3395")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5fbf3bafe5e3c5a492a982e0d5540ac1b463f1da")]
 [assembly: System.Reflection.AssemblyProductAttribute("api-novo-testamento")]
 [assembly: System.Reflection.AssemblyTitleAttribute("api-novo-testamento")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
